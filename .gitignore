@@ -1,0 +1,7 @@
+node_modules
+.vscode-test/
+*.vsix
+.vscode/
+.vscodeignore
+vsc-extension-quickstart.md
+package-lock.json
