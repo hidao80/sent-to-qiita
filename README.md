@@ -37,11 +37,12 @@ This is an extension for posting articles to qiita.com.
 
 ## Known Issues
 
-1. When registering a token, json formatting is broken.
+1. When registering a token, json layout is broken.
 2. Posting will fail if there is no tag.
+3. Can't attach image.
 
 ## Release Notes
 
-### 1.0.0
+### 0.0.1
 
 Initial release of send-to-qiita extentions.
