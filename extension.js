@@ -5,15 +5,13 @@ const request = require('request');
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
-  console.log('Congratulations, your extension "send-to-qiita" is now active!');
-
   let disposable = vscode.commands.registerCommand('extension.sendToQiita', function () {
     const settings = require(process.env.APPDATA + "\\Code\\User\\settings.json");
     const token = settings["send-to-qiita.token"];
-    if (token === undefined) return;
-
-    const text = vscode.window.activeTextEditor.document.getText();
-    const matches = text.match(/((?:(?!--+)[^-])+)/g);
+    if (token === undefined) {
+      vscode.window.showInformationMessage("Undefined token.");
+      return;
+    }
 
     const options = {
       url: "https://qiita.com/api/v2/items",
@@ -24,13 +22,15 @@ function activate(context) {
       },
       json: {}
     };
-    options.json["body"] = matches[1].trim();
+    const text = vscode.window.activeTextEditor.document.getText();
+    const textHeader = text.match(/(?<=---+)[\s\S]*?(?=---+\s\s)/)[0];
+    options.json["body"] = text.match(/(?<=---+[\s\S]*---+\s\s)([\s\S]*)/)[0];
 
     let item = "";
     let label = ""
-    for (const match of matches[0].split('\n')) {
-      if (match.trim().length > 0) {
-        item = match.split(":");
+    for (const line of textHeader.split('\n')) {
+      if (line.trim().length > 0) {
+        item = line.split(":");
         label = item[0].trim();
         switch (label) {
           case "coediting":
@@ -43,13 +43,11 @@ function activate(context) {
             options.json[label] = item[1].trim();
             break;
           case "tags":
-            options.json[label] = createTagsObject(match.slice(match.indexOf(":")+1).trim().split(" "));
-            //console.log(array);
+            options.json[label] = createTagsObject(line.slice(line.indexOf(":")+1).trim().split(" "));
             break;
         }
       }
     }
-    //console.log(options);
     
     if (!options.json["title"]) {
       vscode.window.showInformationMessage("Undefined title.");
@@ -93,6 +91,9 @@ exports.activate = activate;
 // this method is called when your extension is deactivated
 function deactivate() {}
 
+/**
+ * @param {object[]} tags
+ */
 function createTagsObject(tags) {
   if (JSON.stringify(tags) == JSON.stringify([""])) return undefined;
 
@@ -114,6 +115,9 @@ function createTagsObject(tags) {
   return array;
 }
 
+/**
+ * @param {string} token
+ */
 function setToken(token) {
   const fs = require("fs");
   const path = process.env.APPDATA + "\\Code\\User\\settings.json";
