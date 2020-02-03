@@ -2,7 +2,8 @@
 	"name": "send-to-qiita",
 	"displayName": "send to Qiita",
 	"description": "",
-	"version": "0.0.1",
+  "version": "0.0.1",
+  "publisher": "hidao80",
 	"engines": {
 		"vscode": "^1.41.0"
 	},
