@@ -15,19 +15,17 @@ This is an extension for posting articles to qiita.com.
 1. Register the token in advance.
 2. Input header and article. The header must have a title and tags.
 
-    ```plain
-    ---
-    title: article title
-    tags: Unsplit_string1:0.0.1 Unsplit_string2
-    tweet: false
-    private: false
-    coediting: false
-    group_url_name: dev
-    ---
-    # article
-    contents...
-    ```
-
+        ---
+        title: article title
+        tags: Unsplit_string1:0.0.1 Unsplit_string2
+        tweet: false
+        private: false
+        coediting: false
+        group_url_name: dev
+        ---   
+        # article
+        contents...
+       
 3. Inkey `Ctrl+P`
 4. Input `>Send to Qiita`
 
